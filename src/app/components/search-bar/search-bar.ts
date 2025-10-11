@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { CitySuggestion } from '../../models';
 import { debounceTime, of, switchMap } from 'rxjs';
 import { GeodbService } from '../../services/geodb.service';
+import { OpenWeatherService } from '../../services/open-weather.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -20,6 +21,8 @@ import { GeodbService } from '../../services/geodb.service';
 })
 export class SearchBar {
   geodbService = inject(GeodbService);
+  openWeatherService = inject(OpenWeatherService);
+
   cityCtrl = new FormControl('');
   citySuggestions = signal<CitySuggestion[]>([]);
   selectedCity = signal<CitySuggestion | null>(null);
@@ -37,12 +40,19 @@ export class SearchBar {
       .subscribe(results => this.citySuggestions.set(results));
 
     effect(() => {
-      console.log(this.selectedCity());
-      // ToDo: add request logic to the OpenWeather API
+      const city = this.selectedCity();
+      if (city) {
+        this.openWeatherService.fetchCurrentWeather(city.lat, city.lon).subscribe();
+        // ToDo: handle loading, success, and failure... then render the data
+      }
     });
   }
 
   onSelect(city: CitySuggestion): void {
     this.selectedCity.set(city);
+  }
+
+  displayCity(city: CitySuggestion): string {
+    return city ? city.name : '';
   }
 }

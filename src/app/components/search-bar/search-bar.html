@@ -9,6 +9,7 @@
   />
   <mat-autocomplete
     #auto="matAutocomplete"
+    [displayWith]="displayCity"
     (optionSelected)="onSelect($event.option.value)"
   >
     @for (city of citySuggestions(); track city.name) {
