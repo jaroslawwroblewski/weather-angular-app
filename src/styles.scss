@@ -45,4 +45,19 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/a/ad/BlankMap-World_gray.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-color: #f8f9fa;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
+
+@media (max-width: 768px) {
+  body {
+    background-size: auto 80vh;
+    background-position: center center;
+  }
+}
+
