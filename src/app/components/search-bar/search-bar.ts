@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, model, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,7 +25,7 @@ export class SearchBar {
 
   cityCtrl = new FormControl('');
   citySuggestions = signal<CitySuggestion[]>([]);
-  selectedCity = signal<CitySuggestion | null>(null);
+  selectedCity = model<CitySuggestion | null>();
 
   constructor() {
     this.cityCtrl.valueChanges

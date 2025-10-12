@@ -35,6 +35,7 @@ export class CacheService {
     this.saveToStorage();
   }
 
+  // ToDo: consider storing favorite keys instead of editing the entire object
   toggleFavorite(key: string): void {
     const entry = this.cache()[key];
     if (!entry) return;

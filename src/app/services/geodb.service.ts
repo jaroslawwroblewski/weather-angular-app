@@ -12,9 +12,11 @@ export class GeodbService {
 
   fetchCitySuggestions(query: string): Observable<CitySuggestion[]> {
     const url = `${environment.geodbBaseUrl}/cities?limit=5&namePrefix=${encodeURIComponent(query)}`;
+    // ToDo: create an interface for the response
     return this.http.get<any>(url, {}).pipe(
       map(res =>
         res.data.map((c: any) => ({
+          id: c.id,
           name: c.city,
           country: c.country,
           lat: c.latitude,

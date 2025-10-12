@@ -12,7 +12,7 @@
     [displayWith]="displayCity"
     (optionSelected)="onSelect($event.option.value)"
   >
-    @for (city of citySuggestions(); track city.name) {
+    @for (city of citySuggestions(); track city.id) {
       <mat-option [value]="city">
         {{ city.name }}, {{ city.country }}
       </mat-option>

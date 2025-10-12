@@ -2,6 +2,7 @@ import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { of, tap } from 'rxjs';
 import { CacheService } from '../services/cache.service';
+import { WeatherDetails, WeatherResponse } from '../models';
 
 export const weatherCacheInterceptor: HttpInterceptorFn = (req, next) => {
   const cacheService = inject(CacheService);
@@ -17,7 +18,7 @@ export const weatherCacheInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  const cacheKey = `${lat}-${lon}`;
+  const cacheKey = `${lat}_${lon}`;
   const cached = cacheService.get(cacheKey);
 
   if (cached) {
@@ -27,7 +28,7 @@ export const weatherCacheInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     tap((event) => {
       if (event instanceof HttpResponse) {
-        cacheService.set(cacheKey, event.body);
+        cacheService.set(cacheKey, mapToWeatherDetails(event.body as WeatherResponse, lat, lon));
       }
     })
   );
@@ -36,4 +37,19 @@ export const weatherCacheInterceptor: HttpInterceptorFn = (req, next) => {
 function getParam(url: string, key: string): string | null {
   const match = url.match(new RegExp(`[?&]${key}=([^&]+)`));
   return match ? decodeURIComponent(match[1]) : null;
+}
+
+function mapToWeatherDetails(response: WeatherResponse, lat: string, lon: string): WeatherDetails {
+  return {
+    cityName: response.name,
+    lat,
+    lon,
+    icon: response.weather[0].icon,
+    description: response.weather[0].description,
+    temp: response.main.temp,
+    tempMin: response.main.temp_min,
+    tempMax: response.main.temp_max,
+    humidity: response.main.humidity,
+  };
+
 }

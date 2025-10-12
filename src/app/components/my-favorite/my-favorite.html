@@ -1,0 +1,15 @@
+<h3 class="text-lg m-0 font-medium">My Favorite Cities:</h3>
+@for (city of data(); track city) {
+  <mat-list-item>
+    <div class="flex justify-between items-center">
+      @if(city.icon) {
+        <img [src]="'https://openweathermap.org/img/wn/' + city.icon + '.png'" alt="Weather icon"/>
+      }
+      <p class="text-xl m-0">{{ city.temp | number: '1.0-0' }}°C</p>
+      <p class="text-xl">{{city.cityName}}</p>
+    </div>
+    @if (!$last) {
+      <mat-divider [inset]="true"></mat-divider>
+    }
+  </mat-list-item>
+}
