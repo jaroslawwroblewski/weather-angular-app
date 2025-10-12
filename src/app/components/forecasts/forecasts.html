@@ -1,0 +1,18 @@
+<div class="grid grid-cols-2 md:grid-cols-6 gap-6">
+  @for (forecast of data(); track forecast) {
+    <div class="p-6 rounded-2xl bg-white/20 backdrop-blur-sm">
+      <div class="flex flex-col justify-center items-center">
+        @if(forecast.icon) {
+          <img [src]="'https://openweathermap.org/img/wn/' + forecast.icon + '.png'" alt="Weather icon" class="mx-auto"/>
+        }
+        <p class="mt-0 ">{{ forecast.date }}</p>
+        <p class="mt-0 capitalize">{{ forecast.description }}</p>
+        <div class="flex">
+          <p class="text-xl m-0">{{ forecast.tempMin | number: '1.0-0' }}°C</p>
+          <span class="mx-2">-</span>
+          <p class="text-xl m-0">{{ forecast.tempMax | number: '1.0-0' }}°C</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

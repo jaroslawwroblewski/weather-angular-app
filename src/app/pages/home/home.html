@@ -4,18 +4,19 @@
       <app-search-bar [(selectedCity)]="selectedCity"/>
     </div>
     @if (currentWeather() || favoriteCities().length) {
-      <div class="p-6 rounded-2xl bg-white">
+      <div class="mb-6 p-6 rounded-2xl bg-white">
         <div class="flex flex-col md:flex-row md:gap-8">
           <div class="w-full md:w-[40%]" >
-            @if (currentWeather()) {
-              <app-current-weather [data]="currentWeather()" [isFavorite]="isCurrentCityFavorite()"/>
-            }
+              <app-current-weather [data]="currentWeather()!" [isFavorite]="isCurrentCityFavorite()" (clickedFavorite)="onToggleFavorite($event)"/>
           </div>
           <div class="w-full md:w-[60%]">
-            <app-my-favorite [data]="favoriteCities()"></app-my-favorite>
+            <app-my-favorite [data]="favoriteCities()" (removed)="onToggleFavorite($event)"></app-my-favorite>
           </div>
         </div>
       </div>
+    }
+    @if(forecasts()) {
+      <app-forecasts [data]="forecasts()"/>
     }
   </div>
 </div>

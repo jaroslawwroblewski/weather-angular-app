@@ -5,7 +5,5 @@ export interface WeatherDetails {
   icon: string;
   description: string;
   temp: number;
-  tempMin: number;
-  tempMax: number;
   humidity: number;
 }

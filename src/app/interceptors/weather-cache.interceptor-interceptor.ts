@@ -47,8 +47,6 @@ function mapToWeatherDetails(response: WeatherResponse, lat: string, lon: string
     icon: response.weather[0].icon,
     description: response.weather[0].description,
     temp: response.main.temp,
-    tempMin: response.main.temp_min,
-    tempMax: response.main.temp_max,
     humidity: response.main.humidity,
   };
 
