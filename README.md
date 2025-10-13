@@ -23,11 +23,23 @@
 | **OpenWeatherMap API** | Weather data and forecasts                 |
 | **GeoDB Cities API**   | City search and autocomplete functionality |
 | **LocalStorage**       | Caching weather data for performance       |
+| **Jest**               | Unit tests                                 |
 
-## 📦 Installation
+## 📦 Get Started
 
 ```bash
 git clone https://github.com/jaroslawwroblewski/weather-angular-app.git
 cd weather-angular-app
 npm install
 ng serve
+```
+**Important!**
+`openWeatherApiKey` is located in the `environment` and is extracted from the demo version available on the website (public key) because there are problems with creating a free account on openweathermap.org.
+
+## 🧪 Testing
+
+This project uses Jest for unit tests. The current test coverage is:
+- Statements: 95.02%
+- Branches: 75%
+- Functions: 97.72%
+- Lines: 97.95%
