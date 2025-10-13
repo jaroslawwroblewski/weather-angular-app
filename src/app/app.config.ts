@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { weatherCacheInterceptor } from './interceptors/weather-cache.interceptor-interceptor';
+import { weatherCacheInterceptor } from './interceptors/weather-cache.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
