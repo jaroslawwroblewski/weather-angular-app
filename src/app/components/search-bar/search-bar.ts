@@ -1,4 +1,4 @@
-import { Component, inject, model, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,8 +20,8 @@ import { GeodbService } from '../../services/geodb.service';
 export class SearchBar {
   geodbService = inject(GeodbService);
   cityCtrl = new FormControl('');
+  selected = output<{ lat: string; lon: string; }>();
   citySuggestions = signal<CitySuggestion[]>([]);
-  selectedCity = model<CitySuggestion | null>();
 
   constructor() {
     this.cityCtrl.valueChanges
@@ -37,7 +37,8 @@ export class SearchBar {
   }
 
   onSelect(city: CitySuggestion): void {
-    this.selectedCity.set(city);
+    const { lat, lon } = city;
+    this.selected.emit({ lat, lon });
   }
 
   displayCity(city: CitySuggestion): string {

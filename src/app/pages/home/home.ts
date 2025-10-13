@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, signal, untracked } from '@angular
 import { SearchBar } from '../../components/search-bar/search-bar';
 import { CurrentWeather } from '../../components/current-weather/current-weather';
 import { CacheService } from '../../services/cache.service';
-import { CitySuggestion, Forecast, WeatherDetails } from '../../models';
+import { Forecast, WeatherDetails } from '../../models';
 import { MyFavorite } from '../../components/my-favorite/my-favorite';
 import { OpenWeatherService } from '../../services/open-weather.service';
 import { catchError, of, switchMap, tap } from 'rxjs';
@@ -23,15 +23,14 @@ export class Home {
   cacheService = inject(CacheService);
   openWeatherService = inject(OpenWeatherService);
   snackBar = inject(MatSnackBar);
-
-  selectedCity = signal<CitySuggestion | null>(null);
+  selectedCoord = signal<{ lat: string; lon: string } | null>(null);
   weatherData = computed(() => this.cacheService.cache());
   currentWeather = computed<WeatherDetails | undefined>(() => {
-    const city = this.selectedCity();
+    const coord = this.selectedCoord();
     const data = this.weatherData();
-    const key = `${city?.lat}_${city?.lon}`;
+    const key = `${coord?.lat}_${coord?.lon}`;
 
-    if (!city || !data[key]) return undefined;
+    if (!coord || !data[key]) return undefined;
     return data[key].data as WeatherDetails;
   });
   forecasts = signal<Forecast[]>([]);
@@ -41,29 +40,26 @@ export class Home {
     : []);
 
   isCurrentCityFavorite = computed(() => {
-    const city = this.selectedCity();
-    if (!city) return false;
-    return this.favoriteCities().some(fav =>
-      fav.lat === city.lat.toString() && fav.lon === city.lon.toString()
-    );
+    const coord = this.selectedCoord();
+    if (!coord) return false;
+    return this.favoriteCities().some(fav => fav.lat === coord.lat && fav.lon === coord.lon);
   });
 
   constructor() {
     effect(() => {
-      const city = this.selectedCity();
-      if (!city) return;
+      const coord = this.selectedCoord();
+      if (!coord) return;
 
       untracked(() => {
-        this.openWeatherService.fetchCurrentWeather(city.lat, city.lon).pipe(
+        this.openWeatherService.fetchCurrentWeather(coord.lat, coord.lon).pipe(
           switchMap(() =>
-            this.openWeatherService.fetchFiveDayForecast(city.lat, city.lon).pipe(
+            this.openWeatherService.fetchFiveDayForecast(coord.lat, coord.lon).pipe(
               tap((forecast) => {
-                console.log(forecast);
                 this.forecasts.set(forecast);
               }),
               catchError(() => {
                 this.showErrorNotification('Error: Could not fetch forecast data!');
-                return of(null);
+                return of([]);
               })
             )
           ),

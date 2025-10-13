@@ -1,21 +1,21 @@
 <div class="flex justify-center items-center min-h-screen">
   <div class="flex flex-col w-4/5 max-w-6xl sm:w-full">
     <div class="mb-6 p-6 pb-1 rounded-2xl bg-white/20 backdrop-blur-sm">
-      <app-search-bar [(selectedCity)]="selectedCity"/>
+      <app-search-bar (selected)="selectedCoord.set($event)"/>
     </div>
     @if (currentWeather() || favoriteCities().length) {
       <div class="mb-6 p-6 rounded-2xl bg-white">
         <div class="flex flex-col md:flex-row md:gap-8">
-          <div class="w-full md:w-[40%]" >
-              <app-current-weather [data]="currentWeather()!" [isFavorite]="isCurrentCityFavorite()" (clickedFavorite)="onToggleFavorite($event)"/>
+          <div class="w-full md:w-[40%]">
+            <app-current-weather [data]="currentWeather()!" [isFavorite]="isCurrentCityFavorite()" (clickedFavorite)="onToggleFavorite($event)"/>
           </div>
           <div class="w-full md:w-[60%]">
-            <app-my-favorite [data]="favoriteCities()" (removed)="onToggleFavorite($event)"></app-my-favorite>
+            <app-my-favorite [data]="favoriteCities()" (removed)="onToggleFavorite($event)" (selected)="selectedCoord.set($event)"></app-my-favorite>
           </div>
         </div>
       </div>
     }
-    @if(forecasts()) {
+    @if (forecasts()) {
       <app-forecasts [data]="forecasts()"/>
     }
   </div>

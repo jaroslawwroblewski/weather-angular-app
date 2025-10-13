@@ -1,7 +1,7 @@
 @if(data()?.length) {
   <h3 class="text-lg m-0 font-medium">My Favorite Cities:</h3>
   @for (city of data(); track city) {
-    <mat-list-item>
+    <mat-list-item (click)="selected.emit({lat: city.lat, lon: city.lon})" class="cursor-pointer" role="button" tabindex="0">
       <div class="flex justify-start items-center">
         @if (city.icon) {
           <img [src]="'https://openweathermap.org/img/wn/' + city.icon + '.png'" alt="Weather icon" class="mr-6"/>

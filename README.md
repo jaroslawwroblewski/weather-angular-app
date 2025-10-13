@@ -28,6 +28,6 @@
 
 ```bash
 git clone https://github.com/jaroslawwroblewski/weather-angular-app.git
-cd weatherapp
+cd weather-angular-app
 npm install
 ng serve

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { CacheEntry } from '../models';
+import { CacheEntry, Forecast, WeatherDetails } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class CacheService {
     this.loadFromStorage();
   }
 
-  get(key: string): any | null {
+  get(key: string): WeatherDetails | null {
     const entry = this.cache()[key];
     if (!entry) return null;
 
@@ -26,7 +26,7 @@ export class CacheService {
     return entry.data;
   }
 
-  set(key: string, data: any): void {
+  set(key: string, data: WeatherDetails): void {
     const updated = {
       ...this.cache(),
       [key]: { data, isFavorite: false, timestamp: Date.now() },
@@ -35,7 +35,31 @@ export class CacheService {
     this.saveToStorage();
   }
 
-  // ToDo: consider storing favorite keys instead of editing the entire object
+  getForecast(key: string): Forecast[] {
+    const entry = this.cache()[key];
+    if (!entry?.forecast) return [];
+
+    const isExpired = Date.now() - entry.timestamp > this.ttl;
+    if (isExpired) {
+      this.remove(key);
+      return [];
+    }
+
+    return entry.forecast;
+  }
+
+  setForecast(key: string, forecast: any[]): void {
+    const current = this.cache()[key];
+    if (!current) return;
+
+    const updated = {
+      ...this.cache(),
+      [key]: { ...current, forecast, timestamp: Date.now() }
+    };
+    this.cache.set(updated);
+    this.saveToStorage();
+  }
+
   toggleFavorite(key: string): void {
     const entry = this.cache()[key];
     if (!entry) return;
@@ -57,11 +81,6 @@ export class CacheService {
     delete updated[key];
     this.cache.set(updated);
     this.saveToStorage();
-  }
-
-  clear(): void {
-    this.cache.set({});
-    localStorage.removeItem(this.CACHE_KEY);
   }
 
   private loadFromStorage(): void {

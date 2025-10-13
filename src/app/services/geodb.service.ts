@@ -19,8 +19,8 @@ export class GeodbService {
           id: c.id,
           name: c.city,
           country: c.country,
-          lat: c.latitude,
-          lon: c.longitude,
+          lat: c.latitude.toString(),
+          lon: c.longitude.toString(),
         }))
       )
     );

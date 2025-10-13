@@ -20,4 +20,5 @@ import { DecimalPipe } from '@angular/common';
 export class MyFavorite {
   data = input<WeatherDetails[]>();
   removed = output<{ lat: string; lon: string; }>();
+  selected = output<{ lat: string; lon: string; }>();
 }
